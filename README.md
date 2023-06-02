@@ -10,7 +10,7 @@
 ## About
 This repository is a template to generate PDFs with the abilty to select 
 from arguments (args) the chapters to include. This is useful for teachers 
-who want to give study material gradually to the students.
+who want to give study material gradually to their students.
 
 ## Dependencies
 This project can be executed in two ways:
