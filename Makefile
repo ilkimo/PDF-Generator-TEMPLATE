@@ -2,9 +2,22 @@ PDF_NAME=lezione-informatica
 TMP_MAIN=$(PDF_NAME).tex
 MAIN=main.pdf
 BUILD_DIR=build
-TOPICS = funzioni ricorsioni # Default topics
+DOCKER_IMAGE=ilkimo_latex_pdf_generator
+TOPICS=funzioni ricorsioni # Default topics
 
-all: $(PDF_NAME)
+all: build
+
+docker_build: $(PDF_NAME)
+	@if [ -z "$(shell docker images -q $(DOCKER_IMAGE))" ]; then \
+		@echo "\033[0;36Image does not exist. Building...\033[0m"; \
+		docker build -t $(DOCKER_IMAGE) . ; \
+	fi
+	docker run --rm -v "$(shell pwd)":/usr/src/myapp $(DOCKER_IMAGE) TOPICS="$(TOPICS)"
+
+	#docker build -t lezioni-informatica-latex-pdf-generator .
+	#docker run --rm -v "$(pwd)":/usr/src/myapp lezioni-informatica-latex-pdf-generator TOPICS="funzioni"
+
+build: $(PDF_NAME)
 
 $(PDF_NAME): build_dir $(MAIN) preamble.tex $(addsuffix /main.tex,$(TOPICS))
 	@echo -e "\033[0;36mExecuting target $@\033[0m"
@@ -40,8 +53,23 @@ build_dir:
 	mkdir -p $(BUILD_DIR)
 
 .PHONY: clean
-clean:
-	rm -rf $(BUILD_DIR)/*
+clean: docker_clean clean_build
+	rm -rf $(BUILD_DIR)
 	rm -f $(TMP_MAIN)
 	rm -f *.log *.aux *.toc *.lof *.lot *.out *.bbl *.blg *.synctex.gz
+
+.PHONY: docker_clean
+docker_clean:
+	@if [ -z "$(shell docker images -q $(DOCKER_IMAGE))" ]; then \
+		echo "Docker image not present."; \
+	else \
+		docker rmi $(DOCKER_IMAGE); \
+	fi
+
+.PHONY: clean_build
+clean_build: docker_clean clean
+	rm -rf $(BUILD_DIR)
+	rm -f $(TMP_MAIN)
+	rm -f *.log *.aux *.toc *.lof *.lot *.out *.bbl *.blg *.synctex.gz
+
 
