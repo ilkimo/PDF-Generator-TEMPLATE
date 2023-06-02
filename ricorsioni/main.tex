@@ -1,0 +1,111 @@
+\section{Ricorsioni}
+\label{ch:ricorsioni}
+
+\subsection{Introduzione alle Ricorsioni}
+% La ricorsione in informatica è un metodo in cui la soluzione di un problema dipende 
+% dalle soluzioni di istanze più piccole dello stesso problema. Nel linguaggio C, una 
+% funzione può chiamare se stessa se la soluzione del problema può essere ottenuta usando 
+% rappresentazioni più piccole dello stesso problema.
+
+La ricorsione è un concetto molto importante nell'informatica e può essere paragonata ad 
+una serie di scatole nidificate, o ad un gioco di specchi che riflettono l'uno nell'altro 
+all'infinito (queste analogie risultano più chiare quando si vede lo stack di chiamate di 
+un programma!). Supponiamo che tu stia cercando un libro in una pila di libri. 
+Il tuo approccio potrebbe 
+essere il seguente:
+\begin{enumerate}
+	\item Guardi il libro in cima alla pila. 
+	\item Se il libro che stai cercando è quello, l'hai trovato! Se non è quello, metti da 
+		parte il libro e ripeti il processo con la pila di libri rimanente. 
+\end{enumerate}
+Questa è una forma di ricorsione. 
+Stai ripetendo lo stesso processo (cercare il libro in cima alla pila) finché non 
+trovi quello che stai cercando o finché non hai esaurito i libri. 
+In termini di programmazione, una funzione ricorsiva è una funzione che chiama se 
+stessa nel suo codice, semplificando di volta in volta il problema (riducendo 
+la pila di libri), finché non risulterà talmente semplice da essere già risolto 
+(quando la pila ha solo più un libro, se è quello che stavi cercando, allora l'hai trovato, 
+se non è quello, allora non c'è nella pila)!
+
+\subsection{Concetto di Base}
+Una funzione ricorsiva è una funzione che risolve un problema risolvendo istanze 
+più piccole dello stesso problema. Di seguito è riportata la sintassi di base della 
+ricorsione nel linguaggio C.
+
+\needspace{10\baselineskip}
+\begin{lstlisting}[style=codeSnippet]
+void funzioneRicorsiva(<qualche argomento>) {
+	if(<condizione>) {
+		// caso base
+		return <risultato banale>;
+	} else {
+		// caso ricorsivo
+		<qualche operazione>;
+		return funzioneRicorsiva(<altro argomento>);
+	}
+}
+\end{lstlisting}
+
+\subsection{Esempio di Ricorsione}
+L'esempio classico di ricorsione è il calcolo del fattoriale di un numero. Ecco come implementarlo in C.
+
+\begin{verbatim}
+#include<stdio.h>
+
+long long fattoriale(int n)
+{
+   if(n == 0)
+	  return 1;
+   else
+	  return(n * fattoriale(n-1));
+}
+
+int main()
+{
+   int i;
+   long long f;
+
+   printf("Inserire un numero per calcolare il suo fattoriale\n");
+   scanf("%d", &i);
+
+   f = fattoriale(i);
+   printf("%d! = %lld\n", i, f);
+
+   return 0;
+}
+\end{verbatim}
+
+\section{Esercizi}
+
+\subsection{Esercizio 1}
+Scrivi una funzione ricorsiva per calcolare la somma dei primi 'n' numeri naturali.
+
+% Questa potrebbe essere una soluzione, ma LaTeX non supporta pulsanti interattivi click-to-show-the-solution.
+% \begin{verbatim}
+% #include <stdio.h>
+% int somma(int n)
+% {
+%     if (n != 0)
+%         return n + somma(n - 1);
+%     else
+%         return n;
+% }
+% \end{verbatim}
+
+\subsection{Esercizio 2}
+Scrivi una funzione ricorsiva per calcolare l'n-esimo numero di Fibonacci.
+
+% Questa potrebbe essere una soluzione, ma LaTeX non supporta pulsanti interattivi click-to-show-the-solution.
+% \begin{verbatim}
+% #include <stdio.h>
+% int fibonacci(int n)
+% {
+%     if(n == 0)
+%         return 0;
+%     else if(n == 1)
+%         return 1;
+%     else
+%         return(fibonacci(n-1) + fibonacci(n-2));
+% }
+% \end{verbatim}
+

@@ -1,0 +1,36 @@
+TMP_MAIN=main_uncommented.tex
+MAIN=main.pdf
+TOPICS = funzioni ricorsioni # Default topics
+
+all: lezione-informatica.pdf
+
+lezione-informatica.pdf: $(MAIN) preamble.tex $(addsuffix /main.tex,$(TOPICS))
+	@echo -e "\033[0;36mExecuting target $@\033[0m"
+	pdflatex -output-directory . $<
+	mv main.pdf $@
+
+.PHONY: $(TMP_MAIN)
+$(TMP_MAIN): main.tex
+	@echo -e "\033[0;36mExecuting target $(TMP_MAIN)\033[0m"
+	cp main.tex $(TMP_MAIN)
+		for topic in $(TOPICS); do \
+		sed -i "s|%\\\input{$$topic/main.tex}|\\\input{$$topic/main.tex}|g" $(TMP_MAIN); \
+	done
+
+$(MAIN): $(TMP_MAIN)
+	@echo -e "\033[0;36mExecuting target $@\033[0m"
+	pdflatex $(TMP_MAIN)
+
+%.pdf: 
+	@echo -e "\033[0;36mExecuting target $@\033[0m"
+	pdflatex -output-directory $(@:.pdf=) $(@:.pdf=)/main.tex ../preamble.tex
+	mv $(@:.pdf=)/main.pdf $@
+
+# Main target to run a full compilation
+full: main.tex
+	@echo -e "\033[0;36mExecuting target $@\033[0m"
+	pdflatex -shell-escape main.tex
+
+easy: main.tex
+	@echo -e "\033[0;36mExecuting target $@\033[0m"
+	pdflatex -shell-escape main.tex
