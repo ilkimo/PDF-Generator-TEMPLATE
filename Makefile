@@ -14,9 +14,6 @@ docker_build: $(PDF_NAME)
 	fi
 	docker run --rm -v "$(shell pwd)":/usr/src/myapp $(DOCKER_IMAGE) TOPICS="$(TOPICS)"
 
-	#docker build -t lezioni-informatica-latex-pdf-generator .
-	#docker run --rm -v "$(pwd)":/usr/src/myapp lezioni-informatica-latex-pdf-generator TOPICS="funzioni"
-
 build: $(PDF_NAME)
 
 $(PDF_NAME): build_dir $(MAIN) preamble.tex $(addsuffix /main.tex,$(TOPICS))
@@ -38,15 +35,6 @@ $(MAIN): $(TMP_MAIN)
 	@echo -e "\033[0;36mExecuting target $@\033[0m"
 	pdflatex -output-directory $(@:.pdf=) $(@:.pdf=)/main.tex ../preamble.tex
 	mv $(@:.pdf=)/main.pdf $@
-
-# Main target to run a full compilation
-full: main.tex
-	@echo -e "\033[0;36mExecuting target $@\033[0m"
-	pdflatex -shell-escape main.tex
-
-easy: main.tex
-	@echo -e "\033[0;36mExecuting target $@\033[0m"
-	pdflatex -shell-escape main.tex
 
 .PHONY: build_dir
 build_dir:
@@ -71,5 +59,4 @@ clean_build: docker_clean clean
 	rm -rf $(BUILD_DIR)
 	rm -f $(TMP_MAIN)
 	rm -f *.log *.aux *.toc *.lof *.lot *.out *.bbl *.blg *.synctex.gz
-
 
