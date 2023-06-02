@@ -3,7 +3,7 @@ TMP_MAIN=$(PDF_NAME).tex
 MAIN=main.pdf
 BUILD_DIR=build
 DOCKER_IMAGE=ilkimo_latex_pdf_generator
-TOPICS=funzioni ricorsioni # Default topics
+TOPICS=$(shell find topics/* -type d -exec basename {} \;) # Default topics
 
 all: build
 
@@ -16,7 +16,7 @@ docker_build: $(PDF_NAME)
 
 build: $(PDF_NAME)
 
-$(PDF_NAME): build_dir $(MAIN) preamble.tex $(addsuffix /main.tex,$(TOPICS))
+$(PDF_NAME): build_dir $(MAIN) preamble.tex $(addprefix topics/,$(addsuffix /main.tex,$(TOPICS)))
 	@echo -e "\033[0;36mExecuting target $@\033[0m"
 
 .PHONY: $(TMP_MAIN)
@@ -24,14 +24,14 @@ $(TMP_MAIN): main.tex
 	@echo -e "\033[0;36mExecuting target $(TMP_MAIN)\033[0m"
 	cp main.tex $(TMP_MAIN)
 	for topic in $(TOPICS); do \
-		sed -i "s|%\\\input{$$topic/main.tex}|\\\input{$$topic/main.tex}|g" $(TMP_MAIN); \
+		sed -i "s|%\\\input{topics/$$topic/main.tex}|\\\input{topics/$$topic/main.tex}|g" $(TMP_MAIN); \
 	done
 
 $(MAIN): $(TMP_MAIN)
 	@echo -e "\033[0;36mExecuting target $@\033[0m"
 	pdflatex -output-directory $(BUILD_DIR) $(TMP_MAIN)
 
-%.pdf: 
+topics/%.pdf: 
 	@echo -e "\033[0;36mExecuting target $@\033[0m"
 	pdflatex -output-directory $(@:.pdf=) $(@:.pdf=)/main.tex ../preamble.tex
 	mv $(@:.pdf=)/main.pdf $@
