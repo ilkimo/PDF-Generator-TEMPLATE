@@ -57,3 +57,36 @@ To just clean the Docker image:
 ```/bin/bash
 make docker_clean
 ```
+
+## Use the Docker Image from Docker Hub
+If you just want to create your PDF, you can pull the Docker Image from Docker Hub with:
+```/bin/bash
+docker pull ilkimo/ilkimo_latex_pdf_generator:latest
+```
+Then run the container with:
+```/bin/bash
+docker run --rm -v <PROJECT_PATH>:/usr/src/myapp ilkimo_latex_pdf_generator:latest
+```
+To generate the full version with all chapters.
+
+Or if you want to specify the chapter list:
+```/bin/bash
+docker run --rm -v <PROJECT_PATH>:/usr/src/myapp ilkimo_latex_pdf_generator:latest TOPICS="chapter1 chapter2.."
+```
+The ".." are not meant to be written.
+
+CARE!! This tool is opinionated, you HAVE to follow a structure like:
+```
+.
+├── main.tex
+├── preamble.tex
+└── topics
+    ├── my_chapter1
+    │   └── main.tex
+    ├── my_chapter2
+    │   └── main.tex
+    ├── my_chapter3
+    │   └── main.tex
+    └── my_chapter4
+        └── main.tex
+```
