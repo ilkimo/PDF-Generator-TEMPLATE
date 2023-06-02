@@ -54,6 +54,13 @@ docker_clean:
 	else \
 		docker rmi $(DOCKER_IMAGE); \
 	fi
+	@if [ -z "$(shell docker images -q nanozoo/pdflatex:3.14159265--f2f4a3f)" ]; then \
+		echo "Docker image not present."; \
+	else \
+		docker rmi nanozoo/pdflatex:3.14159265--f2f4a3f; \
+	fi
+
+
 
 .PHONY: clean_build
 clean_build: docker_clean clean
