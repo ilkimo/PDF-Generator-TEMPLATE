@@ -1,4 +1,4 @@
-# materiale-lezioni-informatica
+# PDF Generator (with chapter selection)
 ## Index
 - [About](#about)
 - [Dependencies](#dependencies)
