@@ -7,7 +7,8 @@ TOPICS=$(shell find topics/* -type d -exec basename {} \;) # Default topics
 
 all: build
 
-docker_build: $(PDF_NAME)
+.PHONY: docker_build
+docker_build: build_dir
 	@if [ -z "$(shell docker images -q $(DOCKER_IMAGE))" ]; then \
 		@echo "\033[0;36Image does not exist. Building...\033[0m"; \
 		docker build -t $(DOCKER_IMAGE) . ; \
