@@ -60,10 +60,8 @@ docker_clean:
 		docker rmi nanozoo/pdflatex:3.14159265--f2f4a3f; \
 	fi
 
-
-
 .PHONY: clean_build
-clean_build: docker_clean clean
+clean_build:
 	rm -rf $(BUILD_DIR)
 	rm -f $(TMP_MAIN)
 	rm -f *.log *.aux *.toc *.lof *.lot *.out *.bbl *.blg *.synctex.gz
