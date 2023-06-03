@@ -66,6 +66,9 @@ clean_build:
 # Mounting the PREFIX should not be needed for the example PDF creation, since
 # the template files are already inside the Docker Image, but in this way we avoid more
 # complex solutions that apply conditional logic based on example / project scenarios.
+# 
+# Another workaround is the path mounted to /usr/src/latex-genrator/project. Putting a '.' after
+# $(PREFIX) removes the Docker error when using a path like ./project/ that has a trailing '/'.
 .PHONY: _run_docker
 _run_docker:
 	@echo -e "\033[0;36mExecuting target _run_docker\033[0m"
@@ -76,9 +79,11 @@ _run_docker:
 	docker run \
 		--rm \
 		-v "$(shell pwd)/build":/usr/src/latex-generator/build/ \
-		-v "$(shell patsubst %/,%,$(PREFIX))":/usr/src/latex-generator/project/ \
+		-v "./$(PREFIX).":/usr/src/latex-generator/project/ \
 		$(DOCKER_IMAGE) \
-		PDF_NAME="$(PDF_NAME)";
+		PDF_NAME="$(PDF_NAME)" \
+		TOPICS="$(TOPICS)" \
+		PREFIX="$(PREFIX)";
 
 _$(PDF_NAME): _$(MAIN) \
 		$(PREFIX)preamble.tex
