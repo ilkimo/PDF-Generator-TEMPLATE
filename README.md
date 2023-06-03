@@ -33,18 +33,19 @@ Here is an example of file structure to follow:
 ├── main.tex
 ├── preamble.tex
 └── topics
-    ├── my_introduction
+    ├── chapter1
     │   └── main.tex
-    ├── my_chapter1
+    ├── chapter2
     │   └── main.tex
-    ├── my_chapter2
+    ├── chapter3
     │   └── main.tex
-    ├── my_chapter3
-    │   └── main.tex
-    └── my_chapter4
+    └── introduction
         └── main.tex
+
+6 directories, 6 files
+
 ```
-The names of the chapters (my_introduction, my_chapter1) can be different, 
+The names of the chapters (introduction, chapter1, chapter2, ...) can be different, 
 but the .tex files have to keep these names or the tool will not be able to 
 function properly.
 
@@ -76,21 +77,31 @@ build commands to use Docker :D
 ```/bin/bash
 make docker_build
 ```
-2) To include only some chapters (in this example, just "funzioni 
-and "ricorsioni"
+2) To include only some chapters (in this example, just "introduction" 
+and "chapter1"
 ```/bin/bash
-make docker_build "TOPICS=funzioni ricorsioni"
+make docker_build "TOPICS=introduction chapter1 chapter2"
+```
+
+## Build Example PDF
+From project:
+```/bin/bash
+make build_example
+```
+From Docker:
+```/bin/bash
+make docker_build_example
 ```
 
 ### Select desired chapters
-You can use the arg "TOPICS=topic1 topic2..." after the Makefile target to select
+You can use the arg "TOPICS=introduction chapter1 chapter2" after the Makefile target to select
 the desired chapters, for example:
 ```/bin/bash
-make "TOPICS=my_introduction my_chapter1 my_chapter2"
+make "TOPICS=introduction chapter1 chapter2"
 ```
 
 If you are building with Docker, the args have to be written like a little differently: 
-$ docker run ... TOPICS="my_introduction my_chapter1 my_chapter2" 
+$ docker run ... TOPICS="introduction chapter1 chapter2" 
 (refer to [Use the Docker Image from Docker Hub](#use-the-docker-image-from-docker-hub))
 
 
@@ -137,7 +148,7 @@ To generate the full version with all chapters (PDF_NAME is optional).
 
 Or if you want to specify the chapter list:
 ```/bin/bash
-docker run --rm -v <PROJECT_PATH>:/usr/src/latex-generator/project -v ./build:/usr/src/latex-generator/build ilkimo/latex_pdf_generator:1.0 TOPICS="chapter1 chapter2.." PDF_NAME="<PDF_NAME>"
+docker run --rm -v <PROJECT_PATH>:/usr/src/latex-generator/project -v ./build:/usr/src/latex-generator/build ilkimo/latex_pdf_generator:1.0 TOPICS="introduction chapter1 chapter2" PDF_NAME="<PDF_NAME>"
 ```
 The ".." are not meant to be written, and PDF_NAME is optional.
 
