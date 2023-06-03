@@ -7,7 +7,7 @@ WORKDIR /usr/src/myapp
 COPY Makefile .
 
 # Copy the example files into the container
-COPY example/ /usr/src/example/
+COPY example/ /usr/src/myapp/example/
 
 # Set the command to be run when the container starts
 ENTRYPOINT ["make"]
