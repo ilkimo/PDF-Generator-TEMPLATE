@@ -69,7 +69,6 @@ clean_build:
 .PHONY: _run_docker
 _run_docker:
 	@echo -e "\033[0;36mExecuting target _run_docker\033[0m"
-	@echo "-------------------------------------> $(PREFIX)"
 	@if [ -z "$(shell docker images -q $(DOCKER_IMAGE))" ]; then \
 		@echo "\033[0;36mImage does not exist. Building...\033[0m"; \
 		docker build -t $(DOCKER_IMAGE) . ; \
