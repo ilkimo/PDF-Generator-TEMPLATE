@@ -11,8 +11,9 @@ else
     PREFIX=project/
 endif
 
-# Default value (can be overwritten from args when launching make target)
-PDF_NAME=example-document
+# PDF_NAME defaults to the name of the project's directory, 
+# but can be overwritten from args when launching make target.
+PDF_NAME=$(patsubst %/,%,$(PREFIX))
 TOPICS=$(shell find $(PREFIX)topics/* -type d -exec basename {} \;)
 TMP_MAIN=$(PDF_NAME).tex
 
@@ -61,6 +62,10 @@ clean_build:
 	rm -f *.log *.aux *.toc *.lof *.lot *.out *.bbl *.blg *.synctex.gz
 
 # LATEX BUILD TARGETS (private targets) ---------------------------------------------------------
+# _run_docker installs and executes the container capable of generating PDFs with pdflatex.
+# Mounting the PROJECT_PATH should not be needed for the example PDF creation, since
+# the template files are already inside the Docker Image, but in this way we avoid more
+# complex solutions that apply conditional logic based on example / project scenarios.
 .PHONY: _run_docker
 _run_docker:
 	@echo -e "\033[0;36mExecuting target _run_docker\033[0m"
