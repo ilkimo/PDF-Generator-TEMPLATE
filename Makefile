@@ -3,9 +3,9 @@ MAIN=main.pdf
 BUILD_DIR=build
 DOCKER_IMAGE=ilkimo_latex_pdf_generator
 
-ifneq (,$(findstring $(MAKECMDGOALS),build_example docker_build_example))
+ifneq (,$(filter $(MAKECMDGOALS),build_example docker_build_example))
     PREFIX=example/
-else ifeq ($(wildcard project/.*),) # If project directory does not exist
+else ifeq ($(wildcard project/main.tex),) # Checks if there could be a project ongoing 
     PREFIX=example/
 else
     PREFIX=project/
