@@ -63,15 +63,19 @@ If you just want to create your PDF, you can pull the Docker Image from Docker H
 ```/bin/bash
 docker pull ilkimo/ilkimo_latex_pdf_generator:latest
 ```
+Create a build directory:
+```/bin/bash
+mkdir build
+```
 Then run the container with:
 ```/bin/bash
-docker run --rm -v <PROJECT_PATH>:/usr/src/myapp ilkimo_latex_pdf_generator:latest
+docker run --rm -v <PROJECT_PATH>:/usr/src/myapp/project -v ./build:/usr/src/myapp/build ilkimo_latex_pdf_generator:latest
 ```
 To generate the full version with all chapters.
 
 Or if you want to specify the chapter list:
 ```/bin/bash
-docker run --rm -v <PROJECT_PATH>:/usr/src/myapp ilkimo_latex_pdf_generator:latest TOPICS="chapter1 chapter2.."
+docker run --rm -v <PROJECT_PATH>:/usr/src/myapp/project -v ./build:/usr/src/myapp/build ilkimo_latex_pdf_generator:latest TOPICS="chapter1 chapter2.."
 ```
 The ".." are not meant to be written.
 
