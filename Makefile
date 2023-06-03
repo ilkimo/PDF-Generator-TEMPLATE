@@ -11,6 +11,7 @@ else
     PREFIX=project/
 endif
 
+# Default value (can be overwritten from args when launching make target)
 PDF_NAME=example-document
 TOPICS=$(shell find $(PREFIX)topics/* -type d -exec basename {} \;)
 TMP_MAIN=$(PDF_NAME).tex
@@ -19,6 +20,11 @@ TMP_MAIN=$(PDF_NAME).tex
 all: build
 
 # OTHER CALLABLE TARGETS ------------------------------------------------------------------------
+# ATTENTION!!!
+# The example targets seem duplicated versions of the non-example ones, but there is a 
+# conditional variable assignment on the selected target that makes the Makefile act
+# differently.
+
 build_example: _build_dir \
 		_$(PDF_NAME)
 
@@ -26,10 +32,10 @@ build: _build_dir \
 	_$(PDF_NAME)
 
 .PHONY: _docker_build_example
-docker_build_example: _run_docker
+docker_build_example: _build_dir _run_docker
 
 .PHONY: docker_build
-docker_build: _run_docker
+docker_build: _build_dir _run_docker
 
 # CLEAN PROJECT ---------------------------------------------------------------------------------
 .PHONY: clean
@@ -62,7 +68,12 @@ _run_docker:
 		@echo "\033[0;36mImage does not exist. Building...\033[0m"; \
 		docker build -t $(DOCKER_IMAGE) . ; \
 	fi
-	docker run --rm -v "$(shell pwd)":/usr/src/myapp $(DOCKER_IMAGE) TOPICS="$(TOPICS)" PDF_NAME="$(PDF_NAME)"
+	docker run \
+		--rm \
+		-v "$(shell pwd)/build":/usr/src/myapp/build/ \
+		-v "$(PROJECT_PATH)":/usr/src/myapp/project/ \
+		$(DOCKER_IMAGE) \
+		PDF_NAME="$(PDF_NAME)";
 
 _$(PDF_NAME): _$(MAIN) \
 		$(PREFIX)preamble.tex
