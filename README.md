@@ -25,7 +25,7 @@ This project can be executed in two ways:
 ## Build
 It is possible to generate PDFs with all chapters with:
 ```/bin/bash
-make
+make "PDF_NAME=my-document"
 ```
 Or just the interested chapters:
 ```/bin/bash

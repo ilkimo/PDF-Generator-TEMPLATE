@@ -1,0 +1,41 @@
+\documentclass[12pt, letterpaper]{article}
+\usepackage{graphicx}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{listings}
+\usepackage[margin=1in]{geometry}
+\usepackage{ifthen}
+\usepackage{needspace}
+\definecolor{my_background}{RGB}{40,40,40}
+\definecolor{vs_dark_foreground}{RGB}{212,212,212}
+\definecolor{vs_dark_keyword}{RGB}{86,156,214}
+\definecolor{vs_dark_string}{RGB}{206,145,120}
+\definecolor{vs_dark_function}{RGB}{220,220,170}
+\definecolor{vs_dark_comment}{RGB}{106,153,85}
+
+\lstdefinestyle{codeSnippet}{
+    language=C,
+    backgroundcolor=\color{my_background},   
+    commentstyle=\color{vs_dark_comment},
+    keywordstyle=\color{vs_dark_keyword},
+    numberstyle=\tiny\color{black},
+    stringstyle=\color{vs_dark_string},
+    basicstyle=\color{vs_dark_foreground}\ttfamily\small,
+    identifierstyle=\color{vs_dark_function},
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=4
+}
+
+
+\title{Lezioni di informatica}
+\author{Kim Marco Viberti}
+\pagecolor{white}
+\def\textColor{black}
+\color{\textColor}
