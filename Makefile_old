@@ -1,55 +1,40 @@
 PDF_NAME=lezione-informatica
+TMP_MAIN=$(PDF_NAME).tex
 MAIN=main.pdf
 BUILD_DIR=build
 DOCKER_IMAGE=ilkimo_latex_pdf_generator
+TOPICS=$(shell find topics/* -type d -exec basename {} \;) # Default topics
 
-# Default values
-LOAD_EXAMPLE=1
-PREFIX=example/
-TOPICS=$(shell find $(PREFIX)topics/* -type d -exec basename {} \;)
-
-TMP_MAIN=$(PREFIX)$(PDF_NAME).tex
-
-all: check_imported_project build
-
-.PHONY: check_imported_project
-check_imported_project:
-	@if [ -d "project" ]; then \
-		LOAD_EXAMPLE=0; \
-		PREFIX=project/; \
-		TOPICS=$(shell find $(PREFIX)topics/* -type d -exec basename {} \;); \
-		TMP_MAIN=$(PREFIX)$(PDF_NAME).tex; \
-	fi
+all: build
 
 .PHONY: docker_build
-docker_build: check_imported_project build_dir
+docker_build: build_dir
 	@if [ -z "$(shell docker images -q $(DOCKER_IMAGE))" ]; then \
-		@echo "\033[0;36mImage does not exist. Building...\033[0m"; \
+		@echo "\033[0;36Image does not exist. Building...\033[0m"; \
 		docker build -t $(DOCKER_IMAGE) . ; \
 	fi
 	docker run --rm -v "$(shell pwd)":/usr/src/myapp $(DOCKER_IMAGE) TOPICS="$(TOPICS)"
 
-build: check_imported_project $(PDF_NAME)
+build: $(PDF_NAME)
 
-$(PDF_NAME): build_dir $(MAIN) $(PREFIX)preamble.tex $(addprefix $(PREFIX)topics/,$(addsuffix /main.tex,$(TOPICS)))
+$(PDF_NAME): build_dir $(MAIN) preamble.tex $(addprefix topics/,$(addsuffix /main.tex,$(TOPICS)))
 	@echo -e "\033[0;36mExecuting target $@\033[0m"
 
 .PHONY: $(TMP_MAIN)
-$(TMP_MAIN): $(PREFIX)main.tex
+$(TMP_MAIN): main.tex
 	@echo -e "\033[0;36mExecuting target $(TMP_MAIN)\033[0m"
-	cp $(PREFIX)main.tex $(TMP_MAIN)
+	cp main.tex $(TMP_MAIN)
 	for topic in $(TOPICS); do \
-		sed -i "s|%\\\input{topics/$$topic/main.tex}|\\\input{$(PREFIX)topics/$$topic/main.tex}|g" $(TMP_MAIN); \
+		sed -i "s|%\\\input{topics/$$topic/main.tex}|\\\input{topics/$$topic/main.tex}|g" $(TMP_MAIN); \
 	done
-	sed -i "s|\\\input{preamble.tex}|\\\input{$(PREFIX)preamble.tex}|g" $(TMP_MAIN)
 
 $(MAIN): $(TMP_MAIN)
 	@echo -e "\033[0;36mExecuting target $@\033[0m"
 	pdflatex -output-directory $(BUILD_DIR) $(TMP_MAIN)
 
-$(PREFIX)topics/%.pdf: 
+topics/%.pdf: 
 	@echo -e "\033[0;36mExecuting target $@\033[0m"
-	pdflatex -output-directory $(@:.pdf=) $(@:.pdf=)/main.tex ../$(PREFIX)preamble.tex
+	pdflatex -output-directory $(@:.pdf=) $(@:.pdf=)/main.tex ../preamble.tex
 	mv $(@:.pdf=)/main.pdf $@
 
 .PHONY: build_dir
