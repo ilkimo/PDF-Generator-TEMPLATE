@@ -13,7 +13,7 @@ endif
 
 PDF_NAME=example-document
 TOPICS=$(shell find $(PREFIX)topics/* -type d -exec basename {} \;)
-TMP_MAIN=$(PREFIX)$(PDF_NAME).tex
+TMP_MAIN=$(PDF_NAME).tex
 
 # DEFAULT TARGET --------------------------------------------------------------------------------
 all: build
@@ -75,11 +75,11 @@ _$(MAIN): _$(TMP_MAIN)
 .PHONY: _$(TMP_MAIN)
 _$(TMP_MAIN): $(PREFIX)main.tex
 	@echo -e "\033[0;36mExecuting target _TMP_MAIN on name: $(TMP_MAIN)\033[0m"
-	cp $(PREFIX)main.tex $(TMP_MAIN)
+	cp $(PREFIX)main.tex $(BUILD_DIR)/$(TMP_MAIN)
 	for topic in $(TOPICS); do \
-		sed -i "s|%\\\input{topics/$$topic/main.tex}|\\\input{$(PREFIX)topics/$$topic/main.tex}|g" $(TMP_MAIN); \
+		sed -i "s|%\\\input{topics/$$topic/main.tex}|\\\input{$(PREFIX)topics/$$topic/main.tex}|g" $(BUILD_DIR)/$(TMP_MAIN); \
 	done
-	sed -i "s|\\\input{preamble.tex}|\\\input{$(PREFIX)preamble.tex}|g" $(TMP_MAIN)
+	sed -i "s|\\\input{preamble.tex}|\\\input{../$(PREFIX)preamble.tex}|g" $(BUILD_DIR)/$(TMP_MAIN)
 
 _$(PREFIX)topics/%.pdf: 
 	@echo -e "\033[0;36mExecuting target _PREFIXtopics/*.pdf on name: $@\033[0m"
