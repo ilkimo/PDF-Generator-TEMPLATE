@@ -63,20 +63,21 @@ clean_build:
 
 # LATEX BUILD TARGETS (private targets) ---------------------------------------------------------
 # _run_docker installs and executes the container capable of generating PDFs with pdflatex.
-# Mounting the PROJECT_PATH should not be needed for the example PDF creation, since
+# Mounting the PREFIX should not be needed for the example PDF creation, since
 # the template files are already inside the Docker Image, but in this way we avoid more
 # complex solutions that apply conditional logic based on example / project scenarios.
 .PHONY: _run_docker
 _run_docker:
 	@echo -e "\033[0;36mExecuting target _run_docker\033[0m"
+	@echo "-------------------------------------> $(PREFIX)"
 	@if [ -z "$(shell docker images -q $(DOCKER_IMAGE))" ]; then \
 		@echo "\033[0;36mImage does not exist. Building...\033[0m"; \
 		docker build -t $(DOCKER_IMAGE) . ; \
 	fi
 	docker run \
 		--rm \
-		-v "$(shell pwd)/build":/usr/src/myapp/build/ \
-		-v "$(PROJECT_PATH)":/usr/src/myapp/project/ \
+		-v "$(shell pwd)/build":/usr/src/latex-generator/build/ \
+		-v "$(shell patsubst %/,%,$(PREFIX))":/usr/src/latex-generator/project/ \
 		$(DOCKER_IMAGE) \
 		PDF_NAME="$(PDF_NAME)";
 
