@@ -14,7 +14,7 @@ endif
 # PDF_NAME defaults to the name of the project's directory, 
 # but can be overwritten from args when launching make target.
 PDF_NAME=$(patsubst %/,%,$(PREFIX))
-TOPICS=$(shell find $(PREFIX)topics/* -type d -exec basename {} \;)
+CHAPTERS=$(shell find $(PREFIX)chapters/* -type d -exec basename {} \;)
 TMP_MAIN=$(PDF_NAME).tex
 
 # DEFAULT TARGET --------------------------------------------------------------------------------
@@ -82,7 +82,7 @@ _run_docker:
 		-v "./$(PREFIX).":/usr/src/latex-generator/project/ \
 		$(DOCKER_IMAGE) \
 		PDF_NAME="$(PDF_NAME)" \
-		TOPICS="$(TOPICS)" \
+		CHAPTERS="$(CHAPTERS)" \
 		PREFIX="$(PREFIX)";
 
 _$(PDF_NAME): _$(MAIN) \
@@ -97,13 +97,13 @@ _$(MAIN): _$(TMP_MAIN)
 _$(TMP_MAIN): $(PREFIX)main.tex
 	@echo -e "\033[0;36mExecuting target _TMP_MAIN on name: $(TMP_MAIN)\033[0m"
 	cp $(PREFIX)main.tex $(BUILD_DIR)/$(TMP_MAIN)
-	for topic in $(TOPICS); do \
-		sed -i "s|%\\\input{topics/$$topic/main.tex}|\\\input{$(PREFIX)topics/$$topic/main.tex}|g" $(BUILD_DIR)/$(TMP_MAIN); \
+	for topic in $(CHAPTERS); do \
+		sed -i "s|%\\\input{chapters/$$topic/main.tex}|\\\input{$(PREFIX)chapters/$$topic/main.tex}|g" $(BUILD_DIR)/$(TMP_MAIN); \
 	done
 	sed -i "s|\\\input{preamble.tex}|\\\input{../$(PREFIX)preamble.tex}|g" $(BUILD_DIR)/$(TMP_MAIN)
 
-_$(PREFIX)topics/%.pdf: 
-	@echo -e "\033[0;36mExecuting target _PREFIXtopics/*.pdf on name: $@\033[0m"
+_$(PREFIX)chapters/%.pdf: 
+	@echo -e "\033[0;36mExecuting target _PREFIXchapters/*.pdf on name: $@\033[0m"
 	pdflatex -output-directory $(@:.pdf=) $(@:.pdf=)/main.tex ../$(PREFIX)preamble.tex
 	mv $(@:.pdf=)/main.pdf $@
 

@@ -32,7 +32,7 @@ Here is an example of file structure to follow:
 .
 ├── main.tex
 ├── preamble.tex
-└── topics
+└── chapters
     ├── chapter1
     │   └── main.tex
     ├── chapter2
@@ -80,7 +80,7 @@ make docker_build
 2) To include only some chapters (in this example, just "introduction" 
 and "chapter1"
 ```/bin/bash
-make docker_build "TOPICS=introduction chapter1 chapter2"
+make docker_build "CHAPTERS=introduction chapter1 chapter2"
 ```
 
 ## Build Example PDF
@@ -94,19 +94,19 @@ make docker_build_example
 ```
 
 ### Select desired chapters
-You can use the arg "TOPICS=introduction chapter1 chapter2" after the Makefile target to select
+You can use the arg "CHAPTERS=introduction chapter1 chapter2" after the Makefile target to select
 the desired chapters, for example:
 ```/bin/bash
-make "TOPICS=introduction chapter1 chapter2"
+make "CHAPTERS=introduction chapter1 chapter2"
 ```
 
 If you are building with Docker, the args have to be written like a little differently: 
-$ docker run ... TOPICS="introduction chapter1 chapter2" 
+$ docker run ... CHAPTERS="introduction chapter1 chapter2" 
 (refer to [Use the Docker Image from Docker Hub](#use-the-docker-image-from-docker-hub))
 
 
 But keep in mind that the names you write in this list have to be the same names
-of the directories inside the topics/ directory.
+of the directories inside the chapters/ directory.
 
 ### Other customizations
 Here are some other args to customize the PDF generation:
@@ -148,7 +148,7 @@ To generate the full version with all chapters (PDF_NAME is optional).
 
 Or if you want to specify the chapter list:
 ```/bin/bash
-docker run --rm -v <PROJECT_PATH>:/usr/src/latex-generator/project -v ./build:/usr/src/latex-generator/build ilkimo/latex_pdf_generator:v1.0 TOPICS="introduction chapter1 chapter2" PDF_NAME="<PDF_NAME>"
+docker run --rm -v <PROJECT_PATH>:/usr/src/latex-generator/project -v ./build:/usr/src/latex-generator/build ilkimo/latex_pdf_generator:v1.0 CHAPTERS="introduction chapter1 chapter2" PDF_NAME="<PDF_NAME>"
 ```
 The ".." are not meant to be written, and PDF_NAME is optional.
 
