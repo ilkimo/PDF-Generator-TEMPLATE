@@ -142,13 +142,13 @@ mkdir build
 ```
 Then run the container with:
 ```/bin/bash
-docker run --rm -v <PROJECT_PATH>:/usr/src/latex-generator/project -v ./build:/usr/src/latex-generator/build ilkimo/latex_pdf_generator:1.0 PDF_NAME="<PDF_NAME>"
+docker run --rm -v <PROJECT_PATH>:/usr/src/latex-generator/project -v ./build:/usr/src/latex-generator/build ilkimo/latex_pdf_generator:v1.0 PDF_NAME="<PDF_NAME>"
 ```
 To generate the full version with all chapters (PDF_NAME is optional).
 
 Or if you want to specify the chapter list:
 ```/bin/bash
-docker run --rm -v <PROJECT_PATH>:/usr/src/latex-generator/project -v ./build:/usr/src/latex-generator/build ilkimo/latex_pdf_generator:1.0 TOPICS="introduction chapter1 chapter2" PDF_NAME="<PDF_NAME>"
+docker run --rm -v <PROJECT_PATH>:/usr/src/latex-generator/project -v ./build:/usr/src/latex-generator/build ilkimo/latex_pdf_generator:v1.0 TOPICS="introduction chapter1 chapter2" PDF_NAME="<PDF_NAME>"
 ```
 The ".." are not meant to be written, and PDF_NAME is optional.
 
